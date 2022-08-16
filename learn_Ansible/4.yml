@@ -1,0 +1,14 @@
+---    # handlers  
+ 
+
+  - hosts: all
+    user: root
+    become: yes
+    gather_facts: yes
+    tasks:
+            - name: install httpd
+              action: yum name=httpd state=present
+              notify: restart httpd
+    handlers:
+            - name: restart httpd
+              action: service name=httpd state=restarted

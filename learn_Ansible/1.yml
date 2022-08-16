@@ -1,0 +1,6 @@
+---   # My first testing YAML playbook
+  - hosts: test
+    user: root
+    become: yes
+    gather_facts: yes
+ 

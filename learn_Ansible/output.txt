@@ -1,0 +1,492 @@
+/etc/ansible/hosts
+/etc/ansible/ansible.cfg
+/etc/ssh/sshd_config
+
+
+ ansible all --list-hosts
+
+ansible-playbook uptime.yml -i hostfile_primary --ask-pass
+/home/wsadmin/Ansible/veerender/inventory/reboot	
+Notes
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+1) want to use  HOSTS file anywhere  -> create hostfile with anyname(i.e  shos) and in playbook (host:all)
+[root@beta-306 shubham]# cat shos
+10.30.48.130
+
+
+[root@beta-306 shubham]# cat 1.yml
+---   # My first testing YAML playbook
+  - hosts: all
+    user: root
+    become: yes
+    gather_facts: yes
+
+
+[root@beta-306 shubham]# ansible-playbook 1.yml  -i shos --ask-pass
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+[root@beta-306 ansible]# ansible test -m yum -a "pkg=httpd state=present" --ask-pass
+SSH password:
+        [WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "changes": {
+        "installed": [
+            "httpd"
+        ]
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "Resolving Dependencies\n--> Running transaction check\n---> Package httpd.x86_64 0:2.4.6-97.0.5.el7_9.5 will be installed\n--> Processing Dependency: httpd-tools = 2.4.6-97.0.5.el7_9.5 for package: httpd-2.4.6-97.0.5.el7_9.5.x86_64\n--> Processing Dependency: /etc/mime.types for package: httpd-2.4.6-97.0.5.el7_9.5.x86_64\n--> Processing Dependency: libapr-1.so.0()(64bit) for package: httpd-2.4.6-97.0.5.el7_9.5.x86_64\n--> Processing Dependency: libaprutil-1.so.0()(64bit) for package: httpd-2.4.6-97.0.5.el7_9.5.x86_64\n--> Running transaction check\n---> Package apr.x86_64 0:1.4.8-7.el7 will be installed\n---> Package apr-util.x86_64 0:1.5.2-6.0.1.el7 will be installed\n---> Package httpd-tools.x86_64 0:2.4.6-97.0.5.el7_9.5 will be installed\n---> Package mailcap.noarch 0:2.1.41-2.el7 will be installed\n--> Finished Dependency Resolution\n\nDependencies Resolved\n\n================================================================================\n Package          Arch        Version                     Repository       Size\n================================================================================\nInstalling:\n httpd            x86_64      2.4.6-97.0.5.el7_9.5        ol7_latest      1.2 M\nInstalling for dependencies:\n apr              x86_64      1.4.8-7.el7                 ol7_latest      103 k\n apr-util         x86_64      1.5.2-6.0.1.el7             ol7_latest       91 k\n httpd-tools      x86_64      2.4.6-97.0.5.el7_9.5        ol7_latest       94 k\n mailcap          noarch      2.1.41-2.el7                ol7_latest       30 k\n\nTransaction Summary\n================================================================================\nInstall  1 Package (+4 Dependent packages)\n\nTotal download size: 1.5 M\nInstalled size: 4.3 M\nDownloading packages:\n--------------------------------------------------------------------------------\nTotal                                              4.0 MB/s | 1.5 MB  00:00     \nRunning transaction check\nRunning transaction test\nTransaction test succeeded\nRunning transaction\n  Installing : apr-1.4.8-7.el7.x86_64                                       1/5 \n  Installing : apr-util-1.5.2-6.0.1.el7.x86_64                              2/5 \n  Installing : httpd-tools-2.4.6-97.0.5.el7_9.5.x86_64                      3/5 \n  Installing : mailcap-2.1.41-2.el7.noarch                                  4/5 \n  Installing : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            5/5 \n  Verifying  : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            1/5 \n  Verifying  : mailcap-2.1.41-2.el7.noarch                                  2/5 \n  Verifying  : apr-1.4.8-7.el7.x86_64                                       3/5 \n  Verifying  : apr-util-1.5.2-6.0.1.el7.x86_64                              4/5 \n  Verifying  : httpd-tools-2.4.6-97.0.5.el7_9.5.x86_64                      5/5 \n\nInstalled:\n  httpd.x86_64 0:2.4.6-97.0.5.el7_9.5                                           \n\nDependency Installed:\n  apr.x86_64 0:1.4.8-7.el7                   apr-util.x86_64 0:1.5.2-6.0.1.el7 \n  httpd-tools.x86_64 0:2.4.6-97.0.5.el7_9.5  mailcap.noarch 0:2.1.41-2.el7     \n\nComplete!\n"
+    ]
+}
+
+
+
+
+again same command- idempotency is threre (no ovrride)
+
+[root@beta-306 ansible]# ansible test -m yum -a "pkg=httpd state=present" --ask-pass
+SSH password:
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "httpd-2.4.6-97.0.5.el7_9.5.x86_64 providing httpd is already installed"
+    ]
+}
+[WARNING]: Platform linux on host 10.30.48.131 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.131 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "httpd-2.4.6-97.0.5.el7_9.5.x86_64 providing httpd is already installed"
+    ]
+}
+
+[root@beta-306 ansible]# ansible test -m yum -a "pkg=httpd state=latest" --ask-pass
+SSH password:
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "changes": {
+        "installed": [],
+        "updated": []
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "All packages providing httpd are up to date",
+        ""
+    ]
+}
+[WARNING]: Platform linux on host 10.30.48.131 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.131 | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false,
+    "changes": {
+        "installed": [],
+        "updated": []
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "All packages providing httpd are up to date",
+        ""
+    ]
+}
+
+
+-------------------------------------------
+
+
+[root@beta-306 ansible]# ansible test -m yum -a "pkg=httpd state=absent" --ask-pass
+SSH password:
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "changes": {
+        "removed": [
+            "httpd"
+        ]
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "Resolving Dependencies\n--> Running transaction check\n---> Package httpd.x86_64 0:2.4.6-97.0.5.el7_9.5 will be erased\n--> Finished Dependency Resolution\n\nDependencies Resolved\n\n================================================================================\n Package     Arch         Version                       Repository         Size\n================================================================================\nRemoving:\n httpd       x86_64       2.4.6-97.0.5.el7_9.5          @ol7_latest       3.7 M\n\nTransaction Summary\n================================================================================\nRemove  1 Package\n\nInstalled size: 3.7 M\nDownloading packages:\nRunning transaction check\nRunning transaction test\nTransaction test succeeded\nRunning transaction\n  Erasing    : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            1/1 \n  Verifying  : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            1/1 \n\nRemoved:\n  httpd.x86_64 0:2.4.6-97.0.5.el7_9.5                                           \n\nComplete!\n"
+    ]
+}
+[WARNING]: Platform linux on host 10.30.48.131 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.131 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "changes": {
+        "removed": [
+            "httpd"
+        ]
+    },
+    "msg": "",
+    "rc": 0,
+    "results": [
+        "Resolving Dependencies\n--> Running transaction check\n---> Package httpd.x86_64 0:2.4.6-97.0.5.el7_9.5 will be erased\n--> Finished Dependency Resolution\n\nDependencies Resolved\n\n================================================================================\n Package     Arch         Version                       Repository         Size\n================================================================================\nRemoving:\n httpd       x86_64       2.4.6-97.0.5.el7_9.5          @ol7_latest       3.7 M\n\nTransaction Summary\n================================================================================\nRemove  1 Package\n\nInstalled size: 3.7 M\nDownloading packages:\nRunning transaction check\nRunning transaction test\nTransaction test succeeded\nRunning transaction\n  Erasing    : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            1/1 \n  Verifying  : httpd-2.4.6-97.0.5.el7_9.5.x86_64                            1/1 \n\nRemoved:\n  httpd.x86_64 0:2.4.6-97.0.5.el7_9.5                                           \n\nComplete!\n"
+    ]
+}
+
+-------------------------------------------------------------------
+
+ansible test -m service -a "name=httpd state=started" --ask-pass
+-> To check in hostnode -> service httpd status
+----------------------------------------------
+ansible test -m user -a "name=wsadmin" --ask-pass
+-> To check in hostnode -> cat /etc/passwd
+--------to copy -----------------------------
+
+
+[root@beta-306 ansible]# ansible test -m copy -a "src=shub.txt dest=/opt/shubham/" --ask-pass
+SSH password:
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | CHANGED => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": true,
+    "checksum": "b5dcee200ce7aec0bfd7cf3f93d9e5bc7bcba07b",
+    "dest": "/opt/shubham/shub.txt",
+    "gid": 0,
+    "group": "root",
+    "md5sum": "f158cc0c6e9b7f56146972e7bcf7e0fe",
+    "mode": "0644",
+    "owner": "root",
+    "secontext": "system_u:object_r:usr_t:s0",
+    "size": 9,
+    "src": "/root/.ansible/tmp/ansible-tmp-1658735232.0446298-505617-127951109215267/source",
+    "state": "file",
+    "uid": 0
+}
+----------------get node detilas--------------------------------------------------------
+[root@beta-306 ansible]# ansible  test -m setup --ask-pass
+
+give all node system details
+-------------------get node detilas with filter---------------------------
+
+[root@beta-306 ansible]# ansible  test -m setup -a "filter=*ipv4*" --ask-pass
+SSH password:
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+10.30.48.130 | SUCCESS => {
+    "ansible_facts": {
+        "ansible_all_ipv4_addresses": [
+            "10.90.48.151",
+            "10.30.48.130"
+        ],
+        "ansible_default_ipv4": {
+            "address": "10.30.48.130",
+            "alias": "ens160",
+            "broadcast": "10.30.255.255",
+            "gateway": "10.30.48.5",
+            "interface": "ens160",
+            "macaddress": "00:0c:29:7d:f0:0e",
+            "mtu": 1500,
+            "netmask": "255.255.255.0",
+            "network": "10.30.48.0",
+            "type": "ether"
+        },
+        "discovered_interpreter_python": "/usr/bin/python"
+    },
+    "changed": false
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   Playbook	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+####################################################################################################################################################################################
+###################################################################	1 	##########################################################################################
+####################################################################################################################################################################################
+
+vim 1.yml
+--- 
+  - hosts: test
+    user: root
+    become: yes
+    connection: ssh
+    gather_facts: yes
+
+
+[root@beta-306 shubham]# ansible-playbook 1.yml --ask-pass
+SSH password:
+
+PLAY [test] *********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+[WARNING]: Platform linux on host 10.30.48.131 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.131]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+10.30.48.131               : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+
+####################################################################################################################################################################################
+###########################################################################	2 	##########################################################################################
+####################################################################################################################################################################################
+vim 2.yml
+--- 
+  - hosts: test
+    user: root
+    become: yes
+    gather_facts: yes
+    tasks: 
+      - name: install httpd 
+        action: yum name=httpd state=installed
+
+output:
+[root@beta-306 shubham]# ansible-playbook 1.yml --ask-pass
+SSH password:
+
+PLAY [test] *********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install httpd] ************************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+#####################################################################################################################################################################
+###########################################################################	3	###########################################################################
+#####################################################################################################################################################################
+3.yml
+
+---
+  - hosts: test
+    user: root
+    become: yes
+    gather_facts: yes
+    vars:
+      pkgname: httpd
+    tasks:
+              - name: install httpd
+                action: yum name='{{pkgname}}' state=installed
+
+[root@beta-306 shubham]# ansible-playbook 1.yml --ask-pass
+SSH password:
+
+PLAY [test] *********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install httpd] ************************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130  
+
+###########3 Alter ###############################################################################
+[root@beta-306 shubham]# ansible-playbook 3.yml -i shos  --ask-pass
+[root@beta-306 shubham]# ansible-playbook 3.yml -i shos  --ask-pass
+SSH password:
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install HTTPD] ************************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+#####################################################################################################################################################################
+#############################################################################  4   handler Secctions  ################################################################################
+#######################################################################################################################################################################################
+handler Secctions
+
+A handler is exactly the same as a task, but it will run when called by another task
+or
+Handlers are just like regular tasks in an ansible playbook , but are only run if the task contain a notify directive and also indicate that it changed something
+
+# Dry run -> check wheather the playbook is formatted correctly   (not installed anything , just checked)
+output of dry-run 
+->
+[root@beta-306 shubham]# ansible-playbook 11.yml -i shos --ask-pass --check
+SSH password:
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install httpd] ************************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+RUNNING HANDLER [restart httpd] *************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+[root@beta-306 shubham]# ansible-playbook 11.yml -i shos --ask-pass
+SSH password:
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install httpd] ************************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+RUNNING HANDLER [restart httpd] *************************************************************************************************************************************************************
+changed: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=3    changed=2    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+===================================================================================
+
+[root@beta-351 shubham]# which httpd
+/usr/bin/which: no httpd in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/java/jdk1.8.0_151/bin:/root/bin:/usr/java/jdk1.8.0_151/bin)
+[root@beta-351 shubham]# which httpd
+/usr/bin/which: no httpd in (/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/usr/java/jdk1.8.0_151/bin:/root/bin:/usr/java/jdk1.8.0_151/bin)
+[root@beta-351 shubham]#
+[root@beta-351 shubham]#
+[root@beta-351 shubham]#
+[root@beta-351 shubham]#
+[root@beta-351 shubham]#
+[root@beta-351 shubham]# which httpd
+/usr/sbin/httpd
+[root@beta-351 shubham]# service httpd status
+Redirecting to /bin/systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Tue 2022-08-16 00:53:42 PDT; 7s ago
+     Docs: man:httpd(8)
+           man:apachectl(8)
+ Main PID: 15802 (httpd)
+   Status: "Processing requests..."
+   CGroup: /system.slice/httpd.service
+           ├─15802 /usr/sbin/httpd -DFOREGROUND
+           ├─15803 /usr/sbin/httpd -DFOREGROUND
+           ├─15804 /usr/sbin/httpd -DFOREGROUND
+           ├─15805 /usr/sbin/httpd -DFOREGROUND
+           ├─15806 /usr/sbin/httpd -DFOREGROUND
+           └─15807 /usr/sbin/httpd -DFOREGROUND
+
+Aug 16 00:53:42 beta-351.panterranetworks.net systemd[1]: Starting The Apache HTTP Server...
+Aug 16 00:53:42 beta-351.panterranetworks.net snoopy[15802]: [uid:0 sid:15802 tty:(none) cwd:/ filename:/usr/sbin/httpd]: /usr/sbin/httpd -DFOREGROUND
+Aug 16 00:53:42 beta-351.panterranetworks.net systemd[1]: Started The Apache HTTP Server.
+[root@beta-351 shubham]#
+
+
+####################################################################################################################################################################################
+##############################################################	        5  Loop	####################################################################################################
+####################################################################################################################################################################################
+Loops- > Sometimes you want to repeat a task multiples times . In Computer programming , this is called Loops. Common Ansible loops including changing Ownership on several files and/or directives with the file modules, Creating multiple users with the user module , and repeating a polling step untill certian result is reached
+####################################################################################################################################################################################
+vim 1.yml
+
+---    # Loops
+
+  - hosts: all
+    user: root
+    become: yes
+    gather_facts: yes
+    tasks:
+            - name: add list of users in my nodes
+              user: name= '{{item}}' state=present
+              with_items:
+                      - shubham
+                      - goyal
+                      - hari
+
+
+
+
+OUTPUT :-
+
+[root@beta-306 shubham]# ansible-playbook 1.yml -i shos --ask-pass --check
+SSH password:
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [add list of users in my nodes] ********************************************************************************************************************************************************
+changed: [10.30.48.130] => (item=shubham)
+changed: [10.30.48.130] => (item=goyal)
+changed: [10.30.48.130] => (item=hari)
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+
+####################################################################################################################################################################################
+##############################################################	      6 	####################################################################################################
+####################################################################################################################################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
