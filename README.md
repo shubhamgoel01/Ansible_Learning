@@ -5,7 +5,7 @@
     10.30.48.130 <br />
   
   -i use to create hostfile anywhere
-  ## To Run any playbook ,use Below command:
+  ## To Run  playbook ,Use Below command:
   ansible-playbook  1.yml  -i shost --ask-pass
   
   
