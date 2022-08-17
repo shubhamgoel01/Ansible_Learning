@@ -1,8 +1,9 @@
 # Ansible_Learning
 
 - Create Host file - here "shost" is host filename
-  - vim shost
-  - 10.30.48.130
+  -
+   vim shost
+   10.30.48.130
   
   -i use to create hostfile anywhere
   ## To Run any playbook ,use Below command:
