@@ -471,14 +471,100 @@ PLAY RECAP *********************************************************************
 10.30.48.130               : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 
 ####################################################################################################################################################################################
-##############################################################	      6 	####################################################################################################
+##############################################################	      6 Conditions	############################################################################################
+####################################################################################################################################################################################
+Link: https://riptutorial.com/ansible/example/12268/-when--condition----ansible-os-family--lists
+
+Whenever we have different different scenerios , we put conditions according to scenerios
+When statement:- 
+		Sometimes you want to skip a particuclar command on a particular node
+
+vim 1.yml
+
+--- # Conditional playbook
+
+  - hosts: all
+    user: root
+    become: yes
+    tasks:
+            - name: install Apache server for debian family
+              command: apt-get -y install apache2
+              when: ansible_os_family == "Debian"
+            - name: install Apache server for Oracle Linux family
+              command: yum -y install httpd
+              when: ansible_os_family == "RedHat"
+            - name: install Apache server for Centos family
+              command: yum -y install httpd
+              when: ansible_os_family == "CentOS"
+            - name: install Apache server for Windows family
+              command: yum -y install httpd
+              when: ansible_os_family == "Windows"
+
+Output:-
+[root@beta-306 shubham]# ansible-playbook  1.yml  -i shost --ask-pass
+SSH password:
+
+PLAY [all] **********************************************************************************************************************************************************************************
+
+TASK [Gathering Facts] **********************************************************************************************************************************************************************
+[WARNING]: Platform linux on host 10.30.48.130 is using the discovered Python interpreter at /usr/bin/python, but future installation of another Python interpreter could change this. See
+https://docs.ansible.com/ansible/2.9/reference_appendices/interpreter_discovery.html for more information.
+ok: [10.30.48.130]
+
+TASK [install Apache server for debian family] **********************************************************************************************************************************************
+skipping: [10.30.48.130]
+
+TASK [install Apache server for Oracle Linux family] ****************************************************************************************************************************************
+[WARNING]: Consider using the yum module rather than running 'yum'.  If you need to use command because yum is insufficient you can add 'warn: false' to this command task or set
+'command_warnings=False' in ansible.cfg to get rid of this message.
+changed: [10.30.48.130]
+
+TASK [install Apache server for Centos family] **********************************************************************************************************************************************
+skipping: [10.30.48.130]
+
+TASK [install Apache server for Windows family] *********************************************************************************************************************************************
+skipping: [10.30.48.130]
+
+PLAY RECAP **********************************************************************************************************************************************************************************
+10.30.48.130               : ok=2    changed=1    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0
+
+
+####################################################################################################################################################################################
+##############################################################	      7	Vault	###################################################################################################
 ####################################################################################################################################################################################
 
+Ansible allow keeping sensitive data such as password or key in encrypted files , rather then a plaintext in your playbooks
 
+1) creating a new encrypted playbook
+	ansible-vault create 2.yml 
 
+2) Edit the encrypted playbook
+	ansible-vault  edit 2.yml
 
+3) To change the password
+	ansible-vault rekey 2.yml
 
+4) To encrypt an existing playbookname
+	ansible-vault  encrypt 2.yml
 
+5) To Decrypt an encrypted playbookname
+	ansible-vault  decrypt 2.yml
+--------------------------------------------------------------------------------------------
+[root@beta-306 shubham]# vim 2.yml
+$ANSIBLE_VAULT;1.1;AES256
+31636632623562653566306637396564653963363337653361363464393838326637353733333538
+6435656234393262316136316436663839636565303463350a626161623361656636333035366136
+65386162333663353736303563646461306338666332343366316431396532396439376332313930
+3165343162626363320a336233356438313861303865396366383434323330396233626231356562
+37316464666434623937373164343234323232636435643736386264653335376134623831303466
+39373937636237616332373461333763373137646239663637336132643230346666396665376638
+34616434386439626465626136333235396537383037313231333833613336393261613163306331
+31636533386164376263346135383630316534363537633364663265613961666263363863356565
+35366461343031666332623566633836306366666237656433333131386363653035
+
+####################################################################################################################################################################################
+##############################################################	      8 Roles	###################################################################################################
+####################################################################################################################################################################################
 
 
 

@@ -1,0 +1,18 @@
+--- # Conditional playbook
+
+  - hosts: all
+    user: root
+    become: yes
+    tasks:
+            - name: install Apache server for debian family
+              command: apt-get -y install apache2
+              when: ansible_os_family == "Debian"
+            - name: install Apache server for Oracle Linux family
+              command: yum -y install httpd
+              when: ansible_os_family == "RedHat"
+            - name: install Apache server for Centos family
+              command: yum -y install httpd
+              when: ansible_os_family == "CentOS"
+            - name: install Apache server for Windows family
+              command: yum -y install httpd
+              when: ansible_os_family == "Windows"
