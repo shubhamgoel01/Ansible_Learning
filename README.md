@@ -15,3 +15,8 @@
 - 4.yml -> handlers 
 - 5.yml -> Loops
 - 6.yml -> Conditional 
+
+### to Run roles playbook , run Below commands
+- cd play <br />
+ansible-playbook master.yml -i shost --ask-pass
+
