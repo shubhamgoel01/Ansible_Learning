@@ -14,3 +14,4 @@
 - 3.yml -> install HTTPD using Variable
 - 4.yml -> handlers 
 - 5.yml -> Loops
+- 6.yml -> Conditional 
