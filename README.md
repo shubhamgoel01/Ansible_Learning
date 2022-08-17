@@ -1,7 +1,7 @@
 # Ansible_Learning
 
-- Create Host file - here "shost" is host filename
-  - vim shost<br />
+- Create Host file - here "shost" is host filename <br />
+    vim shost   <br />
     10.30.48.130 <br />
   
   -i use to create hostfile anywhere
