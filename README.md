@@ -1,6 +1,6 @@
 # Ansible_Learning
 
-- 1.yml -> basic
+- 1.yml -> basic (target section)
 - 2.yml -> install httpd or any 
 - 3.yml -> install HTTPD using Variable
 - 4.yml -> handlers 
