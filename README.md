@@ -20,3 +20,7 @@
 - cd play <br />
 ansible-playbook master.yml -i shost --ask-pass
 
+
+
+##### [All modules(]https://docs.ansible.com/ansible/2.9/modules/file_module.html#file-module)
+
