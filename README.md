@@ -1,14 +1,5 @@
-# Ansible_Learning in Linux
-- Install  Ansible 
-    1) install python 
-    2) install pip package 
-       1) curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-       2) python3 get-pip.py
-    3) python3 -m pip install ansible
-    4) ansible --version
-    5) python3 -m pip show ansible
-    
-    
+# Ansible_Learning
+   
 - Create Host file - here "shost" is host filename <br />
     vim shost   <br />
     10.30.48.130 <br />
