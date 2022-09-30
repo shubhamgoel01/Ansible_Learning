@@ -1,0 +1,47 @@
+installation https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html
+
+
+sudo yum install epel-release
+sudo yum install ansible
+ansible --version
+yum install vim
+
+vim /etc/ansible/hosts
+
+[test]
+192.168.56.101
+
+
+vim /etc/ansible/ansible.cfg
+
+Uncomments the following line
+
+inventory      = /etc/ansible/hosts
+sudo_user      = root
+
+------------------------------------------------------------------------------------------
+# below ansble is user , and we are providing root privileges to ansible user , so now you can install anything in ansible user
+visudo
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+ansible ALL=(ALL)       NOPASSWD: ALL
+------------------------------------------------------------------------------------------
+Below 2 changes to connect to another server
+vim /etc/ssh/sshd_config
+
+PermitRootLogin yes
+
+# To disable tunneled clear text passwords, change to no here!
+#PasswordAuthentication yes
+#PermitEmptyPasswords no
+PasswordAuthentication yes
+
+After modification , service restart
+service sshd restart
+ ------------------------------------------------------------------------------------------
+-> To copy server public key into node
+  ssh-keygen
+  ls -a
+  cd .ssh/
+  ls
+  ssh-copy-id root@192.168.56.1.101
