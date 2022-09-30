@@ -2,8 +2,8 @@
 - Install  Ansible 
     1) install python 
     2) install pip package 
-        curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-        python3 get-pip.py
+        a) curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+        b) python3 get-pip.py
     3)  python3 -m pip install ansible
     4)  ansible --version
     5)  python3 -m pip show ansibl
