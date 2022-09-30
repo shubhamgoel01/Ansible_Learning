@@ -1,5 +1,7 @@
 # Ansible_Learning
-   
+
+- installation
+   https://docs.ansible.com/ansible/latest/installation_guide/installation_distros.html
 - Create Host file - here "shost" is host filename <br />
     vim shost   <br />
     10.30.48.130 <br />
